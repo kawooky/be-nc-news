@@ -7,5 +7,3 @@ Then create a file called .env.test
 Within this file add the text 'PGDATABASE=nc_news_test'
 
 This connects us to the desired database for each environment.
-
-
