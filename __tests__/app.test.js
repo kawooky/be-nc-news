@@ -93,7 +93,7 @@ describe.only("GET /api/articles/:article_id", () => {
       .get(`/api/articles/${articleId}`)
       .expect(200)
       .then(({ body }) => {
-        expect(body.article).toEqual({
+        expect(body.article).toMatchObject({
           article_id: articleId,
           title: "Sony Vaio; or, The Laptop",
           author: "icellusedkars",
