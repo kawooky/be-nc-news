@@ -86,7 +86,7 @@ describe("GET /api/articles", () => {
   });
 });
 
-describe.only("GET /api/articles/:article_id", () => {
+describe("GET /api/articles/:article_id", () => {
   it("should respond with a status 200 with the article object with the corresponding article_id", () => {
     const articleId = 2;
     return request(app)
@@ -116,15 +116,63 @@ describe.only("GET /api/articles/:article_id", () => {
         });
     });
 
-    it('should return a 400 Bad Request error when endpoint provided an id that is the wrong data type', () => {
-        return request(app)
-      .get("/api/articles/hello")
-      .expect(400)
-      .then((res) => {
-        const body = res.body;
-        expect(body).toEqual({ message: "Bad Request" });
-      });
+    it("should return a 400 Bad Request error when endpoint provided an id that is the wrong data type", () => {
+      return request(app)
+        .get("/api/articles/hello")
+        .expect(400)
+        .then((res) => {
+          const body = res.body;
+          expect(body).toEqual({ message: "Bad Request" });
+        });
     });
   });
 });
 
+describe.only("GET /api/articles/:article_id/comments", () => {
+  it("should return an array of comments with the corresponding article_id with properties comment_id, votes, created_at author, body", () => {
+    const articleId = 3;
+    return request(app)
+      .get(`/api/articles/${articleId}/comments`)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.article).toEqual([
+          {
+            comment_id: 10,
+            body: "git push origin master",
+            votes: 0,
+            author: "icellusedkars",
+            created_at: "2020-06-20T07:24:00.000Z",
+          },
+          {
+            comment_id: 11,
+            body: "Ambidextrous marsupial",
+            votes: 0,
+            author: "icellusedkars",
+            created_at: "2020-09-19T23:10:00.000Z",
+          },
+        ]);
+      });
+  });
+
+  describe("errors", () => {
+    it("should return a 404 Not Found error when endpoint provided an id that doesnt exist", () => {
+      return request(app)
+        .get("/api/articles/99999")
+        .expect(404)
+        .then((res) => {
+          const body = res.body;
+          expect(body).toEqual({ message: "Not Found" });
+        });
+    });
+
+    it("should return a 400 Bad Request error when endpoint provided an id that is the wrong data type", () => {
+      return request(app)
+        .get("/api/articles/hello")
+        .expect(400)
+        .then((res) => {
+          const body = res.body;
+          expect(body).toEqual({ message: "Bad Request" });
+        });
+    });
+  });
+});
