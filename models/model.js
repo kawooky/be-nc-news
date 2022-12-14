@@ -40,18 +40,21 @@ exports.selectArticleById = (id) => {
 
 exports.selectCommentsByArticleId = (id) => {
   return db
-    .query("SELECT comment_id, body, votes, author, created_at FROM comments WHERE article_id = $1;", [id])
+    .query("SELECT * FROM articles WHERE article_id = $1;", [id])
     .then(({ rows }) => {
-      return rows;
-    })
-    .then((comments) => {
-      if (comments.length === 0) {
+      if (rows.length === 0) {
         return Promise.reject({
           status: 404,
           message: "Not Found",
         });
       } else {
-        return comments;
+        return db.query(
+          "SELECT comment_id, body, votes, author, created_at FROM comments WHERE article_id = $1 ORDER BY created_at DESC;",
+          [id]
+        );
       }
+    })
+    .then(({rows}) => {
+      return rows;
     });
 };
