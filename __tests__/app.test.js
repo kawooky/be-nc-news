@@ -155,7 +155,7 @@ describe("GET /api/articles/:article_id/comments", () => {
   });
 
   describe("errors", () => {
-    it.only("should return a 404 Not Found error when endpoint provided an id that doesnt exist", () => {
+    it("should return a 404 Not Found error when endpoint provided an id that doesnt exist", () => {
       return request(app)
         .get("/api/articles/99999/comments")
         .expect(404)
