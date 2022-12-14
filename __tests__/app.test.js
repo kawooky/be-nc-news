@@ -128,7 +128,7 @@ describe("GET /api/articles/:article_id", () => {
   });
 });
 
-describe.only("GET /api/articles/:article_id/comments", () => {
+describe("GET /api/articles/:article_id/comments", () => {
   it("should return an array of comments with the corresponding article_id with properties comment_id, votes, created_at author, body", () => {
     const articleId = 3;
     return request(app)
@@ -155,9 +155,9 @@ describe.only("GET /api/articles/:article_id/comments", () => {
   });
 
   describe("errors", () => {
-    it("should return a 404 Not Found error when endpoint provided an id that doesnt exist", () => {
+    it.only("should return a 404 Not Found error when endpoint provided an id that doesnt exist", () => {
       return request(app)
-        .get("/api/articles/99999")
+        .get("/api/articles/99999/comments")
         .expect(404)
         .then((res) => {
           const body = res.body;
@@ -167,7 +167,7 @@ describe.only("GET /api/articles/:article_id/comments", () => {
 
     it("should return a 400 Bad Request error when endpoint provided an id that is the wrong data type", () => {
       return request(app)
-        .get("/api/articles/hello")
+        .get("/api/articles/hello/comments")
         .expect(400)
         .then((res) => {
           const body = res.body;

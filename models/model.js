@@ -45,7 +45,7 @@ exports.selectCommentsByArticleId = (id) => {
       return rows;
     })
     .then((comments) => {
-      if (comments === undefined) {
+      if (comments.length === 0) {
         return Promise.reject({
           status: 404,
           message: "Not Found",
