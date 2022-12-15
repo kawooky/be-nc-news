@@ -34,5 +34,11 @@ exports.getCommentsByArticleId = (req, res, next) => {
   .catch(next)
 };
 
-
-
+exports.postCommentByArticleId = (req, res, next) =>{
+  const id = req.params.article_id;
+  const usernameAndBody = req.body
+  insertCommentByArticleId(id, usernameAndBody).then((comment)=>{
+    res.status(201).send({comment});
+  })
+  .catch(next);
+  }
