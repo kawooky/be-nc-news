@@ -3,8 +3,7 @@ const {
   getTopics,
   getArticles,
   getArticleById,
-  getCommentsByArticleId,
-  postCommentByArticleId,
+  getCommentsByArticleId
 } = require("./controllers/controller.js");
 const app = express();
 
@@ -16,7 +15,6 @@ app.get("/api/articles/:article_id", getArticleById);
 
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 
-app.post("/api/articles/:article_id/comments", postCommentByArticleId);
 
 app.all("/*", (req, res) => {
   res.status(404).send({ message: "Not Found" });

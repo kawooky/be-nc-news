@@ -2,7 +2,8 @@ const {
   selectTopics,
   selectArticles,
   selectArticleById,
-  selectCommentsByArticleId
+  selectCommentsByArticleId,
+  insertCommentByArticleId
 } = require("../models/model.js");
 
 exports.getTopics = (req, res) => {
@@ -33,6 +34,5 @@ exports.getCommentsByArticleId = (req, res, next) => {
   .catch(next)
 };
 
-exports.postCommentByArticleId = (req, res, next) =>{}
 
 
