@@ -33,4 +33,6 @@ exports.getCommentsByArticleId = (req, res, next) => {
   .catch(next)
 };
 
+exports.postCommentByArticleId = (req, res, next) =>{}
+
 
