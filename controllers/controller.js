@@ -9,15 +9,21 @@ const {
 } = require("../models/model.js");
 
 exports.getTopics = (req, res, next) => {
-  selectTopics().then((topics) => {
-    res.status(200).send({ topics });
-  }).catch(next)
+  selectTopics()
+    .then((topics) => {
+      res.status(200).send({ topics });
+    })
+    .catch(next);
 };
 
-exports.getArticles = (req, res) => {
-  selectArticles().then((articles) => {
-    res.status(200).send({ articles });
-  });
+exports.getArticles = (req, res, next) => {
+  const { topic, sort_by, order } = req.query;
+  console.log(topic, sort_by, order);
+  selectArticles(topic, sort_by, order)
+    .then((articles) => {
+      res.status(200).send({ articles });
+    })
+    .catch(next);
 };
 
 exports.getArticleById = (req, res, next) => {
@@ -58,10 +64,10 @@ exports.patchArticleVotes = (req, res, next) => {
     .catch(next);
 };
 
-
-
-exports.getUsers= (req, res, next) => {
-  selectUsers().then((users) => {
-    res.status(200).send({ users });
-  }).catch(next)
+exports.getUsers = (req, res, next) => {
+  selectUsers()
+    .then((users) => {
+      res.status(200).send({ users });
+    })
+    .catch(next);
 };
