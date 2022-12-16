@@ -5,6 +5,7 @@ const {
   selectCommentsByArticleId,
   insertCommentByArticleId,
   updateArticleVotes,
+  selectUsers,
 } = require("../models/model.js");
 
 exports.getTopics = (req, res) => {
@@ -55,4 +56,12 @@ exports.patchArticleVotes = (req, res, next) => {
       res.status(200).send({ article });
     })
     .catch(next);
+};
+
+
+
+exports.getUsers= (req, res) => {
+  selectUsers().then((users) => {
+    res.status(200).send({ users });
+  });
 };
