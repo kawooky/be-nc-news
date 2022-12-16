@@ -5,12 +5,13 @@ const {
   selectCommentsByArticleId,
   insertCommentByArticleId,
   updateArticleVotes,
+  selectUsers,
 } = require("../models/model.js");
 
-exports.getTopics = (req, res) => {
+exports.getTopics = (req, res, next) => {
   selectTopics().then((topics) => {
     res.status(200).send({ topics });
-  });
+  }).catch(next)
 };
 
 exports.getArticles = (req, res) => {
@@ -55,4 +56,12 @@ exports.patchArticleVotes = (req, res, next) => {
       res.status(200).send({ article });
     })
     .catch(next);
+};
+
+
+
+exports.getUsers= (req, res, next) => {
+  selectUsers().then((users) => {
+    res.status(200).send({ users });
+  }).catch(next)
 };

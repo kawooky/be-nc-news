@@ -301,15 +301,15 @@ describe("POST /api/articles/:article_id/comments", () => {
   });
 });
 
-describe.only('PATCH /api/articles/:article_id', () => {
+describe("PATCH /api/articles/:article_id", () => {
   it("should respond with a status 200 and the updated article", () => {
-		return request(app)
-			.patch("/api/articles/1")
-			.send({ inc_votes: 5 })
-			.expect(200)
-			.then((res) => {
-				const updatedArticle = res.body.article;
-				expect(updatedArticle).toEqual(
+    return request(app)
+      .patch("/api/articles/1")
+      .send({ inc_votes: 5 })
+      .expect(200)
+      .then((res) => {
+        const updatedArticle = res.body.article;
+        expect(updatedArticle).toEqual(
           expect.objectContaining({
             article_id: expect.any(Number),
             title: expect.any(String),
@@ -320,17 +320,17 @@ describe.only('PATCH /api/articles/:article_id', () => {
             votes: expect.any(Number),
           })
         );
-			});
-	});
+      });
+  });
 
   it("should respond with a status 200 and the updated article when the inc_votes value is negative", () => {
-		return request(app)
-			.patch("/api/articles/2")
-			.send({ inc_votes: -5 })
-			.expect(200)
-			.then((res) => {
-				const updatedArticle = res.body.article;
-				expect(updatedArticle).toEqual(
+    return request(app)
+      .patch("/api/articles/2")
+      .send({ inc_votes: -5 })
+      .expect(200)
+      .then((res) => {
+        const updatedArticle = res.body.article;
+        expect(updatedArticle).toEqual(
           expect.objectContaining({
             article_id: expect.any(Number),
             title: expect.any(String),
@@ -341,16 +341,15 @@ describe.only('PATCH /api/articles/:article_id', () => {
             votes: expect.any(Number),
           })
         );
-			});
-	});
+      });
+  });
 
-
-  describe('errors', () => {
-    describe('errors involving id', () => {
+  describe("errors", () => {
+    describe("errors involving id", () => {
       it("should return a 404 Not Found error when endpoint provided an id that doesnt exist", () => {
         return request(app)
           .patch("/api/articles/99999")
-          .send({inc_votes:5})
+          .send({ inc_votes: 5 })
           .expect(404)
           .then((res) => {
             const body = res.body;
@@ -368,35 +367,52 @@ describe.only('PATCH /api/articles/:article_id', () => {
           });
       });
     });
-    
-    describe('PATCH errors', () => {
-    it("should respond with a status 400 and error message Bad Request when sent a object with a malformed body", () => {
-      const requestBody = {};
-      return request(app)
-        .patch("/api/articles/2")
-        .send(requestBody)
-        .expect(400)
-        .then((res) => {
-          const body = res.body;
-          expect(body).toEqual({ message: "Bad Request" });
-        });
-    });
 
-    it("should respond with a status 400 and error message Bad Request when the user sends a comment object with incorrect data types", () => {
-      const requestBody = {inc_votes: 'not today'};
-      return request(app)
-        .patch("/api/articles/2")
-        .send(requestBody)
-        .expect(400)
-        .then((res) => {
-          const body = res.body;
-          expect(body).toEqual({ message: "Bad Request" });
-        });
-    });
+    describe("PATCH errors", () => {
+      it("should respond with a status 400 and error message Bad Request when sent a object with a malformed body", () => {
+        const requestBody = {};
+        return request(app)
+          .patch("/api/articles/2")
+          .send(requestBody)
+          .expect(400)
+          .then((res) => {
+            const body = res.body;
+            expect(body).toEqual({ message: "Bad Request" });
+          });
+      });
+
+      it("should respond with a status 400 and error message Bad Request when the user sends a comment object with incorrect data types", () => {
+        const requestBody = { inc_votes: "not today" };
+        return request(app)
+          .patch("/api/articles/2")
+          .send(requestBody)
+          .expect(400)
+          .then((res) => {
+            const body = res.body;
+            expect(body).toEqual({ message: "Bad Request" });
+          });
+      });
     });
   });
+});
 
-
-
-
+describe("GET /api/users", () => {
+  it("200: should respond with an array of user objects, including properties username, name and avatar_url", () => {
+    return request(app)
+      .get("/api/users")
+      .expect(200)
+      .then(({ body: users }) => {
+        const usersArr = users.users;
+        expect(usersArr).toHaveLength(4);
+        usersArr.forEach((user) => {
+          expect(user).toEqual(
+            expect.objectContaining({
+              username: expect.any(String),
+              name: expect.any(String),
+              avatar_url: expect.any(String),
+            })
+          );
+        });
+      });
+  });
 });
