@@ -21,7 +21,7 @@ exports.selectArticles = (topic, sort_by = "created_at", order = "DESC") => {
       const topicSlugs = [undefined];
       rows.forEach((topic) => topicSlugs.push(topic.slug));
       if (!topicSlugs.includes(topic)) {
-        return Promise.reject({ status: 400, message: "Invalid topic Query" });
+        return Promise.reject({ status: 404, message: "Invalid topic Query" });
       }
       return rows[0];
     })

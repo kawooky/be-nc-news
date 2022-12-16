@@ -480,7 +480,7 @@ describe("GET /api/articles (queries)", () => {
     it("should return a 400 Invalid topic Query error when passed a topic doesnt exist", () => {
       return request(app)
         .get("/api/articles?topic=youssef")
-        .expect(400)
+        .expect(404)
         .then((res) => {
           const body = res.body;
           expect(body).toEqual({ message: "Invalid topic Query" });
