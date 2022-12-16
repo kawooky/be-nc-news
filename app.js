@@ -3,9 +3,12 @@ const {
   getTopics,
   getArticles,
   getArticleById,
-  getCommentsByArticleId
+  getCommentsByArticleId,
+  postCommentByArticleId
 } = require("./controllers/controller.js");
 const app = express();
+
+app.use(express.json());
 
 app.get("/api/topics", getTopics);
 
@@ -15,6 +18,7 @@ app.get("/api/articles/:article_id", getArticleById);
 
 app.get("/api/articles/:article_id/comments", getCommentsByArticleId);
 
+app.post("/api/articles/:article_id/comments", postCommentByArticleId);
 
 app.all("/*", (req, res) => {
   res.status(404).send({ message: "Not Found" });
@@ -24,7 +28,11 @@ app.all("/*", (req, res) => {
 app.use((err, req, res, next) => {
   if (err.code === "22P02") {
     res.status(400).send({ message: "Bad Request" });
-  } else {
+  } else if (err.code === "23503") {
+	res.status(404).send({ message: "Not Found" });
+  } else if (err.code === "23502") {
+	res.status(400).send({ message: "Bad Request" });
+  }else {
     next(err);
   }
 });

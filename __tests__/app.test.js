@@ -169,16 +169,15 @@ describe("GET /api/articles/:article_id/comments", () => {
       });
   });
 
-  it('should respond with a empty array when the id exists but there are no comments', () => {
+  it("should respond with a empty array when the id exists but there are no comments", () => {
     const articleId = 2;
     return request(app)
       .get(`/api/articles/${articleId}/comments`)
       .expect(200)
       .then(({ body }) => {
-        expect(body).toEqual({comments:[]})
-    
+        expect(body).toEqual({ comments: [] });
+      });
   });
-})
 
   describe("errors", () => {
     it("should return a 404 Not Found error when endpoint provided an id that doesnt exist", () => {
@@ -203,4 +202,101 @@ describe("GET /api/articles/:article_id/comments", () => {
   });
 });
 
+describe("POST /api/articles/:article_id/comments", () => {
+  it("should respond with the created row and status 201", () => {
+    const requestBody = {
+      username: "butter_bridge",
+      body: "I buttered a butter bridge",
+    };
+    return request(app)
+      .post("/api/articles/5/comments")
+      .send(requestBody)
+      .expect(201)
+      .then((res) => {
+        const postedComment = res.body.comment;
+        expect(postedComment).toEqual(
+          expect.objectContaining({
+            comment_id: expect.any(Number),
+            body: expect.any(String),
+            article_id: expect.any(Number),
+            author: expect.any(String),
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+          })
+        );
+      });
+  });
 
+  describe("errors", () => {
+    describe("errors involving id", () => {
+      it("should return a 404 Not Found error when endpoint provided an id that doesnt exist", () => {
+        const requestBody = {
+          username: "butter_bridge",
+          body: "I buttered a butter bridge",
+        };
+        return request(app)
+          .post("/api/articles/99999/comments")
+          .send(requestBody)
+          .expect(404)
+          .then((res) => {
+            const body = res.body;
+            expect(body).toEqual({ message: "Not Found" });
+          });
+      });
+
+      it("should return a 400 Bad Request error when endpoint provided an id that is the wrong data type", () => {
+        return request(app)
+          .post("/api/articles/hello/comments")
+          .expect(400)
+          .then((res) => {
+            const body = res.body;
+            expect(body).toEqual({ message: "Bad Request" });
+          });
+      });
+    });
+
+    it("should respond with a status 400 and error message Bad Request when sent a object with a malformed body", () => {
+      const requestBody = {};
+      return request(app)
+        .post("/api/articles/2/comments")
+        .send(requestBody)
+        .expect(400)
+        .then((res) => {
+          const body = res.body;
+          expect(body).toEqual({ message: "Bad Request" });
+        });
+    });
+
+    it("status:400, responds with an appropriate error message when the user sends a comment object with incorrect data types", () => {
+      const requestBody = {
+        username: "butter_bridge",
+        body: { wad: 22 },
+      };
+      return request(app)
+        .post("/api/articles/2/comments")
+        .send(requestBody)
+        .expect(400)
+        .then((res) => {
+          const body = res.body;
+          expect(body).toEqual({ message: "Bad Request" });
+        });
+    });
+
+    describe("username error", () => {
+      it("responds with a 404 Not Found when passed a username which is the correct data type but doesnt exist", () => {
+        const requestBody = {
+          username: "butter",
+          body: "string",
+        };
+        return request(app)
+          .post("/api/articles/2/comments")
+          .send(requestBody)
+          .expect(404)
+          .then((res) => {
+            const body = res.body;
+            expect(body).toEqual({ message: "Not Found" });
+          });
+      });
+    });
+  });
+});
