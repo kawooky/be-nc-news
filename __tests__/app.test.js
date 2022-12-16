@@ -508,3 +508,28 @@ describe("GET /api/articles (queries)", () => {
     });
   });
 });
+
+
+describe("GET /api/articles/:article_id (comment count)", () => {
+  it("should respond with status 200 and now include a property comment count", () => {
+    const articleId = 5;
+    return request(app)
+      .get(`/api/articles/${articleId}`)
+      .expect(200)
+      .then(({ body }) => {
+        expect(body.article).toEqual(
+          expect.objectContaining({
+            article_id: expect.any(Number),
+            title: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            comment_count: expect.any(Number),
+          })
+        );
+        expect(body.article.comment_count).toEqual(2)
+      });
+  });
+});
