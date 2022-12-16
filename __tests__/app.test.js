@@ -416,3 +416,95 @@ describe("GET /api/users", () => {
       });
   });
 });
+
+describe("GET /api/articles (queries)", () => {
+  it("should respond with status 200 and an array with only articles with the topic provided", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch")
+      .expect(200)
+      .then(({ body: articles }) => {
+        const articlesArr = articles.articles;
+        expect(articlesArr).toHaveLength(11);
+        articlesArr.forEach((article) => {
+          expect(article).toEqual(
+            expect.objectContaining({
+              article_id: expect.any(Number),
+              title: expect.any(String),
+              topic: expect.any(String),
+              author: expect.any(String),
+              body: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              comment_count: expect.any(Number),
+            })
+          );
+          expect(article.topic).toBe("mitch");
+        });
+      });
+  });
+  it("should respond with status 200 and an array sorted by the column provided in the query in descending order by default", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch&sort_by=article_id")
+      .expect(200)
+      .then(({ body: articles }) => {
+        const articlesArr = articles.articles;
+        expect(
+          articlesArr.every((article, index) => {
+            return (
+              index === 0 ||
+              article.article_id <= articlesArr[index - 1].article_id
+            );
+          })
+        ).toBe(true);
+      });
+  });
+
+  it("should respond with status 200 and an array sorted by the column provided in the query in the order provided (asc)", () => {
+    return request(app)
+      .get("/api/articles?topic=mitch&sort_by=article_id&order=asc")
+      .expect(200)
+      .then(({ body: articles }) => {
+        const articlesArr = articles.articles;
+        expect(
+          articlesArr.every((article, index) => {
+            return (
+              index === 0 ||
+              article.article_id >= articlesArr[index - 1].article_id
+            );
+          })
+        ).toBe(true);
+      });
+  });
+
+  describe("errors", () => {
+    it("should return a 400 Invalid topic Query error when passed a topic doesnt exist", () => {
+      return request(app)
+        .get("/api/articles?topic=youssef")
+        .expect(400)
+        .then((res) => {
+          const body = res.body;
+          expect(body).toEqual({ message: "Invalid topic Query" });
+        });
+    });
+
+    it("should return a 400 Invalid sort_by Query error when passed an invalid sort_by column", () => {
+      return request(app)
+        .get("/api/articles?sort_by=Youssef")
+        .expect(400)
+        .then((res) => {
+          const body = res.body;
+          expect(body).toEqual({ message: "Invalid sort_by Query" });
+        });
+    });
+
+    it("should return a 400 Invalid order Query error when passed an invalid order", () => {
+      return request(app)
+        .get("/api/articles?order=DROP nc_news_test")
+        .expect(400)
+        .then((res) => {
+          const body = res.body;
+          expect(body).toEqual({ message: "Invalid order Query" });
+        });
+    });
+  });
+});
