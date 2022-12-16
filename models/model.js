@@ -77,3 +77,19 @@ exports.insertCommentByArticleId = (id, usernameAndBody) => {
   });
 };
 
+
+exports.updateArticleVotes =(id, votesObj) =>{
+  const updateQuery = 'UPDATE articles SET votes=votes+ $2 WHERE article_id = $1 RETURNING *;'
+  const params = [id, votesObj.inc_votes]
+
+  return db.query(updateQuery, params).then(({rows})=>{
+    if (rows.length === 0) {
+      return Promise.reject({
+        status: 404,
+        message: "Not Found",
+      })} else {
+        const article = rows[0]
+        return article
+      }
+  })
+}

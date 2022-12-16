@@ -3,7 +3,8 @@ const {
   selectArticles,
   selectArticleById,
   selectCommentsByArticleId,
-  insertCommentByArticleId
+  insertCommentByArticleId,
+  updateArticleVotes,
 } = require("../models/model.js");
 
 exports.getTopics = (req, res) => {
@@ -20,25 +21,38 @@ exports.getArticles = (req, res) => {
 
 exports.getArticleById = (req, res, next) => {
   const id = req.params.article_id;
-  selectArticleById(id).then((article) => {
-    res.status(200).send({ article });
-  })
-  .catch(next)
+  selectArticleById(id)
+    .then((article) => {
+      res.status(200).send({ article });
+    })
+    .catch(next);
 };
 
 exports.getCommentsByArticleId = (req, res, next) => {
   const id = req.params.article_id;
-  selectCommentsByArticleId(id).then((comments) => {
-    res.status(200).send({ comments });
-  })
-  .catch(next)
+  selectCommentsByArticleId(id)
+    .then((comments) => {
+      res.status(200).send({ comments });
+    })
+    .catch(next);
 };
 
-exports.postCommentByArticleId = (req, res, next) =>{
+exports.postCommentByArticleId = (req, res, next) => {
   const id = req.params.article_id;
-  const usernameAndBody = req.body
-  insertCommentByArticleId(id, usernameAndBody).then((comment)=>{
-    res.status(201).send({comment});
-  })
-  .catch(next);
-  }
+  const usernameAndBody = req.body;
+  insertCommentByArticleId(id, usernameAndBody)
+    .then((comment) => {
+      res.status(201).send({ comment });
+    })
+    .catch(next);
+};
+
+exports.patchArticleVotes = (req, res, next) => {
+  const id = req.params.article_id;
+  const votesObj = req.body;
+  updateArticleVotes(id, votesObj)
+    .then((article) => {
+      res.status(200).send({ article });
+    })
+    .catch(next);
+};
