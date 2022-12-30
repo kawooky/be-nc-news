@@ -6,6 +6,7 @@ const {
   insertCommentByArticleId,
   updateArticleVotes,
   selectUsers,
+  deleteCommentById,
 } = require("../models/model.js");
 
 exports.getTopics = (req, res, next) => {
@@ -69,4 +70,15 @@ exports.getUsers = (req, res, next) => {
       res.status(200).send({ users });
     })
     .catch(next);
+};
+
+
+exports.removeCommentById = (req, res, next) => {
+	const id = req.params.comment_id;
+
+	deleteCommentById(id)
+		.then(() => {
+			res.status(204).send();
+		})
+		.catch(next);
 };
