@@ -1,27 +1,118 @@
 {
   "GET /api": {
-    "description": "serves up a json representation of all the available endpoints of the api"
+    "description": "responds with a json representation of all the available endpoints of the api with additional information on each"
   },
+
   "GET /api/topics": {
-    "description": "serves an array of all topics",
-    "queries": [],
+    "description": "responds with an array of all topics",
     "exampleResponse": {
       "topics": [{ "slug": "football", "description": "Footie!" }]
     }
   },
+
   "GET /api/articles": {
-    "description": "serves an array of all topics",
+    "description": "responds with an array of all articles",
     "queries": ["author", "topic", "sort_by", "order"],
     "exampleResponse": {
       "articles": [
         {
-          "title": "Seafood substitutions are increasing",
-          "topic": "cooking",
-          "author": "weegembump",
-          "body": "Text from the article..",
-          "created_at": 1527695953341
-        }
+          "article_id": 3,
+          "title": "Eight pug gifs that remind me of mitch",
+          "topic": "mitch",
+          "author": "icellusedkars",
+          "body": "some gifs",
+          "created_at": "2020-11-03T09:12:00.000Z",
+          "votes": 0,
+          "comment_count": 2
+        },{},{},{}
       ]
     }
+  },
+
+  "GET /api/articles/:article_id":{
+    "description": "responds with the article object with the corresponding article id",
+    "exampleResponse": {
+      "article": 
+        {
+          "article_id": 6,
+          "title": "A",
+          "topic": "mitch",
+          "author": "icellusedkars",
+          "body": "Delicious tin of cat food",
+          "created_at": "2020-10-18T01:00:00.000Z",
+          "votes": 0,
+          "comment_count": 1
+        }
+    }
+  },
+
+  "GET /api/articles/:article_id/comments":{
+    "description": "responds with the comments from a specific article",
+    "exampleResponse": {
+      "comments": [
+        {
+          "comment_id": 11,
+          "body": "Ambidextrous marsupial",
+          "votes": 0,
+          "author": "icellusedkars",
+          "created_at": "2020-09-19T23:10:00.000Z"
+        }, {},{},{}
+      ]
+    }
+  },
+
+  "POST /api/articles/:article_id/comments":{
+    "description": "inserts the comment provided into the database and responds with the inserted comment",
+    "exampleBody" : {
+      "username": "butter_bridge",
+      "body": "I buttered a butter bridge"
+    },
+    "exampleResponse" : {
+      "comment": {
+        "comment_id": 19,
+        "body": "I buttered a butter bridge",
+        "article_id": 5,
+        "author": "butter_bridge",
+        "votes": 0,
+        "created_at": "2023-01-04T14:42:18.807Z"
+      }
+    }
+  },
+
+  "PATCH /api/articles/:article_id":{
+    "description": "adds the number of votes provided in the body to the specified article",
+    "exampleBody" : { "inc_votes" : 3 },
+    "negativeExampleBody": { "inc_votes" : -7 },
+    "exampleResponse": {
+      "article": {
+        "article_id": 1,
+        "title": "Living in the shadow of a great man",
+        "topic": "mitch",
+        "author": "butter_bridge",
+        "body": "I find this existence challenging",
+        "created_at": "2020-07-09T20:11:00.000Z",
+        "votes": 105
+      }
+    }
+  },
+
+  "GET /api/users":{
+    "description": "responds with an array of all users",
+    "exampleResponse": {
+      "users": [
+        {
+          "username": "butter_bridge",
+          "name": "jonny",
+          "avatar_url": "https://www.healthytherapies.com/wp-content/uploads/2016/06/Lime3.jpg"
+        }, {}, {}, {}
+        ]
+      }
+  },
+
+  "DELETE /api/comments/:comment_id":{
+    "description": "deletes the specified comment and responds with no content"
   }
+
 }
+
+

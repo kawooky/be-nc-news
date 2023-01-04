@@ -558,3 +558,12 @@ describe("DELETE /api/comments/:comment_id", () => {
 			});
 	});
 });
+
+
+describe("GET /api", () => {
+	it("should respond with a status 200 with a JSON listing all the endpoints", () => {
+		return request(app)
+    .get("/api")
+    .expect(200)
+	});
+});

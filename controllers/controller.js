@@ -9,6 +9,9 @@ const {
   deleteCommentById,
 } = require("../models/model.js");
 
+// import endpointsJSON from './endpoints.json' assert {type: 'json'};
+const endpointsJSON = require('../endpoints.json')
+
 exports.getTopics = (req, res, next) => {
   selectTopics()
     .then((topics) => {
@@ -81,4 +84,8 @@ exports.removeCommentById = (req, res, next) => {
 			res.status(204).send();
 		})
 		.catch(next);
+};
+
+exports.getEndpointJSON = (req, res, next) => {
+  res.status(200).send(endpointsJSON)
 };
