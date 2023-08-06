@@ -4,11 +4,11 @@
 ---Summary of my project: This project was created during my time on the NorthCoders boot-camp. This website is an example of a social news website and forum where content is socially curated and promoted by site members through voting. Features of the app include adding a comment to an article, voting up or down, filtering articles and selecting a user.
 
 
----Instructions if you wish to run this project locally:
--How to clone: git clone https://github.com/kawooky/fe-nc-news.git
--How to install dependencies: npm install
--How to seed local database: npm run seed
--How to run the tests: npm run test
+---Instructions if you wish to run this project locally:<br>
+-How to clone: git clone https://github.com/kawooky/fe-nc-news.git<br>
+-How to install dependencies: npm install<br>
+-How to seed local database: npm run seed<br>
+-How to run the tests: npm run test<br>
 
 -How to create the environment variables files:
 
